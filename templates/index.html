@@ -1,0 +1,88 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <header class="text-center">
+    <title>CS5180 project</title>
+    <link rel="stylesheet" type="text/css"  href="{{url_for('static', filename='s.css') }}">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  </header>
+  <body>
+  <br /><br />
+  <h1 align="center">CS5180 Project - QA system on COVID-19</h1>
+  <div class="container py-5 px-4">
+  <div class="row rounded-lg overflow-hidden shadow">   
+    <!-- Chat Box-->
+    <div class="col px-0">
+      <div class="px-4 py-5 chat-box bg-white">
+           <!-- Sender Message-->
+        <div id = "chatbRight" align="right">
+        <div class="media w-50 mb-3">
+          <div class="media-body ml-3" >
+            <div class="bg-primary rounded py-2 px-3 mb-2" >
+              <p class="text-small mb-0 text-white" align="left">Hello, I am a COVID-19 QuestionAnswer system. I can answer some Questions about COVID-19.</p>
+            </div>           
+          </div>
+        </div>
+    </div>
+        <div id = "chatb">
+        <div class="media w-50 mb-3">
+          <div class="media-body ml-3" >
+            <div class="bg-light rounded py-2 px-3 mb-2" >
+              <p class="text-small mb-0 text-muted" >Please enter your question below, your questions and answers would be shown here.</p>
+            </div>
+          </div>
+        </div>
+    </div>
+      </div>
+
+    
+      <div id="userInput">
+      <!-- Typing area -->      
+        <div class="input-group">
+          <input type="text" placeholder="Type a message", name = 'q', id = 'textInput',aria-describedby="buttonInput" class="form-control rounded-0 border-0 py-4 bg-light">
+          <div class="input-group-append">
+            <button id="buttonInput" type="submit"  class="btn btn-link"> <i class="fa fa-paper-plane"></i></button>
+          </div>
+        </div>     
+      
+    </div>
+</div> 
+  </div>
+</body>
+<script>
+  function getBotResponse() {
+    var loader = '<div class="spinner"><div class="bounce1"></div> <div class="bounce2"></div>  <div class="bounce3"></div></div>';
+    var rawText = $("#textInput").val();
+    var preHtml =  '<div class="media w-50 mb-3"><div class="media-body ml-3"> <div class="bg-light rounded py-2 px-3 mb-2"><p class="text-small mb-0 text-muted"><p>';   
+    var postHtml = '</p></div> </div> </div>';
+    var userHtml = preHtml + rawText + postHtml;
+    $("#textInput").val("");
+    $("#chatb").append(userHtml);
+    $("#chatb").append(loader);
+    document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+
+    $.get("/get", {q : rawText }).done(function(data) {
+      
+      var pre = '<div class="media w-50 ml-auto mb-3"><div class="media-body"><div class="bg-primary rounded py-2 px-3 mb-2"><p class="text-small mb-0 text-white">';
+      var post = '</p> </div></div></div>';
+      var botHtml = pre + data + post;
+      $(".spinner").remove();
+      $("#chatb").append(botHtml);
+      document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+    });
+  }
+  $("#textInput").keypress(function(e) {
+      if(e.which == 13) {
+          getBotResponse();
+      }
+  });
+  $("#buttonInput").click(function() {
+    getBotResponse();
+  })
+</script>
+</html>
