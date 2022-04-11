@@ -17,8 +17,6 @@ class DataModel:
 
     def __init__(self):
         self.stop_words = set(['?',',',':','@','is','the', 'it',';'])
-        # self.path = [root+p for p in os.listdir(root) if p.endswith('.xlsx')]
-        # self.df = self.load_df() # dataframe
         self.path = ['/Users/zhuxiao/Desktop/Project Center/QA system-CSI5180/ExtendedData.xlsx']
         self.df = self.load_df()  # dataframe
         self.rows = self.df.shape[0]

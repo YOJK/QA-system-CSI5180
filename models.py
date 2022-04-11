@@ -114,8 +114,6 @@ class Models:
 
 if __name__ == "__main__":
     model = Models()
-    # print('******************')
-    # print(model.predict('Hi'))
     print("Test in process")
     filename = 'TestData.csv'
     print("The accuracy of the system:",model.predict_test(filename)*100,'%')
